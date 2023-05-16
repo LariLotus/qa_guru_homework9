@@ -4,7 +4,6 @@ from enum import Enum
 from typing import List
 
 
-
 class Gender(Enum):
     Female = 'female'
     male = 'Male'
@@ -21,7 +20,6 @@ class Subject(Enum):
     economics = 'Economics'
     arts = 'Arts'
     biology = 'Biology'
-
 
 
 class Hobby(Enum):

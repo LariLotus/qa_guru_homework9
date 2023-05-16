@@ -5,15 +5,15 @@ from demoqa_tests.registration_page import RegistrationPage
 
 
 def test_submit_form(browser_management):
-    registration.page = RegistrationPage()
+    registration_page = RegistrationPage()
     student = User(
         first_name='Larisa',
         last_name='Badmaeva',
         email='larilotus12@gmail.com',
-        gender=Gender.Female,
+        gender=Gender.female,
         mobile='8902208866',
         date_of_birth=date(1991, 7, 12),
-        subject=Subject.math,
+        subject=Subject.maths,
         hobby=Hobby.sports,
         picture='IMG_4499.jpg',
         address='Moscow',
@@ -21,23 +21,13 @@ def test_submit_form(browser_management):
         city='Delhi'
     )
 
-    registration.page = RegistrationPage()
-    registration.page.open()
+    registration_page.open()
 
     #WHEN
-    registration.page.fill_form(student)
+    registration_page.fill_form(student)
 
     #THEN
-    registration.page.assert_registration(student)
+    registration_page.assert_registration(student)
 
 
-
-
-
-
-
-
-
-
-
-    # TODO: finish implementation
+ # TODO: finish implementation
