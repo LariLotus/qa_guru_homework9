@@ -1,10 +1,14 @@
 from selene import browser, have
+from data.users import User
 import os
 
 from demoqa_tests import resource
 
 
 class RegistrationPage:
+
+    def __init__(self):
+        self.fill_form = None
 
     def open(self):
         browser.open('/automation-practice-form')
@@ -57,3 +61,6 @@ class RegistrationPage:
                                                         student_date_of_birth,student_subjects, student_hobbies,
                                                         student_picture, student_current_address, student_state_and_city
                                                         ))
+
+
+
