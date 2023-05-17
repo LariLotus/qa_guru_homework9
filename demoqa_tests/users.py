@@ -35,10 +35,16 @@ class User:
     email: str
     gender: List[Gender]
     mobile: str
-    date_of_birth: date
-    subject: List[Subject]
-    hobby: List[Hobby]
+    birth_day: str
+    birth_month: str
+    birth_year: str
+    subjects: List[Subject]
+    hobbies: List[Hobby]
     picture: str
     address: str
     state: str
     city: str
+
+
+
+

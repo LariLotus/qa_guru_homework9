@@ -1,65 +1,64 @@
 from selene import browser, have
+import os
 
 
-from demoqa_tests import resource
+from demoqa_tests.users import User
 
 
 class RegistrationPage:
 
-    def __init__(self):
-        self.fill_form = None
-
     def open(self):
         browser.open('/automation-practice-form')
 
-    def fill_first_name(self, value):
-        browser.element('#firstName').type(value)
-
-    def fill_last_name(self, value):
-        browser.element('#lastName').type(value)
-
-    def fill_email(self, value):
-        browser.element('#userEmail').type(value)
-
-    def choose_gender(self):
+    def fill_form(self, student: User):
+        browser.element('#firstName').type(student.first_name)
+        browser.element('#lastName').type(student.last_name)
+        browser.element('#userEmail').type(student.email)
         browser.element('[value="Female"]').double_click()
+        browser.element('#userNumber').type(student.mobile)
 
-    def fill_phone_number(self, value):
-        browser.element('#userNumber').type(value)
+        browser.element('#dateOfBirthInput').press()
+        browser.element('.react-datepicker__year-select').send_keys(student.birth_year)
+        browser.element('.react-datepicker__month-select').send_keys(student.birth_month)
+        browser.element(f'.react-datepicker__day--0{student.birth_day}').click()
 
-    def fill_date_of_birth(self):
-        browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__year-select').click()
-        browser.element('.react-datepicker__year-select').element('[value="1991"]').click()
-        browser.element('.react-datepicker__month-select').click()
-        browser.element('.react-datepicker__month-select').element('[value="6"]').click()
-        browser.element('.react-datepicker__day--012').click()
+        for subject in student.subjects:
+            browser.element('#subjectsInput').type(subject.value).press_enter()
 
-    def fill_subjects(self, subject):
-        browser.element('#subjectsInput').type(subject).press_enter()
+        for hobby in student.hobbies:
+            browser.all('.custom-checkbox').element_by(have.exact_text(hobby.value)).click()
 
-    def choose_hobies(self):
-        browser.element('[for="hobbies-checkbox-1"]').click()
+        # browser.element('#uploadPicture').send_keys(os.path.abspath(
+        #     os.path.join(os.path.dirname(__file__), os.path.pardir, f'resourсes/{student.picture}')))
 
-    def upload_picture(self, picture):
-        browser.element('#uploadPicture').set_value(resource.path(picture))
+        browser.element('#uploadPicture').send_keys(os.getcwd() + f"/{student.picture}")
 
-    def fill_current_address(self, address):
-        browser.element('#currentAddress').type(address)
+        browser.element('#currentAddress').type(student.address)
 
-    def choose_state_and_city(self, state, city):
-        browser.element('#react-select-3-input').type(state).press_enter()
-        browser.element('#react-select-4-input').type(city).press_enter()
+        browser.element('#react-select-3-input').type(student.state).press_enter()
+        browser.element('#react-select-4-input').type(student.city).press_enter()
 
-    def submit(self):
         browser.element('#submit').press_enter()
 
-    def assert_registration(self, student_name, student_email, student_gender, student_mobile, student_date_of_birth,
-            student_subjects, student_hobbies, student_picture, student_current_address, student_state_and_city):
-        browser.all('tbody tr').should(have.exact_texts(student_name, student_email, student_gender, student_mobile,
-                                                        student_date_of_birth,student_subjects, student_hobbies,
-                                                        student_picture, student_current_address, student_state_and_city
-                                                        ))
+    def assert_registration(self, student: User):
+        full_name = f'{student.first_name} {student.last_name}'
+        birthday = f'{student.birth_day} {student.birth_month},{student.birth_year}'
+        state_and_city = f'{student.state} {student.city}'
+        subjects = ','.join([subject.value for subject in student.subjects])
+        hobbies = ','.join([hobby.value for hobby in student.hobbies])
+
+        browser.all('tbody tr').should(have.exact_texts(
+            f'Student Name {full_name}',
+            f'Student Email {student.email}',
+            f'Gender {student.gender.female.value}',
+            f'Mobile {student.mobile}',
+            f'Date of Birth {birthday}',
+            f'Subjects {subjects}',
+            f'Hobbies {hobbies}',
+            f'Picture {student.picture}',
+            f'Address {student.address}',
+            f'State and City {state_and_city}')
+            )
 
 
 
