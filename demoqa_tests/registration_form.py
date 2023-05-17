@@ -1,11 +1,8 @@
 from selene import browser, have
 import os
 
-from demoqa_tests import resource
-
 
 class RegistrationPage:
-
     def open(self):
         browser.open('/automation-practice-form')
 
@@ -19,34 +16,32 @@ class RegistrationPage:
         browser.element('#userEmail').type(value)
 
     def choose_gender(self):
-        browser.element('[value="Female"]').double_click()
+        browser.element('#gender-radio-2').double_click()
 
     def fill_phone_number(self, value):
         browser.element('#userNumber').type(value)
 
-    def fill_date_of_birth(self):
+    def fill_date_of_birth(self, year, month, day):
         browser.element('#dateOfBirthInput').click()
-        browser.element('.react-datepicker__year-select').click()
-        browser.element('.react-datepicker__year-select').element('[value="1991"]').click()
-        browser.element('.react-datepicker__month-select').click()
-        browser.element('.react-datepicker__month-select').element('[value="6"]').click()
-        browser.element('.react-datepicker__day--012').click()
+        browser.element('.react-datepicker__year-select').type(year)
+        browser.element('.react-datepicker__month-select').type(month)
+        browser.element(f'.react-datepicker__day--0{day}').click()
 
     def fill_subjects(self, subject):
         browser.element('#subjectsInput').type(subject).press_enter()
 
-    def choose_hobies(self):
-        browser.element('[for="hobbies-checkbox-1"]').click()
+    def choose_hobies(self, value):
+        browser.all('[for^=hobbies-checkbox]').element_by(have.exact_text(value)).click()
 
     def upload_picture(self, picture):
-        browser.element('#uploadPicture').set_value(resource.path(picture))
+        browser.element('#uploadPicture').send_keys(os.getcwd() + f'/{picture}')
 
-    def fill_current_address(self, address):
-        browser.element('#currentAddress').type(address)
+    def fill_current_address(self, value):
+        browser.element('#currentAddress').type(value)
 
     def choose_state_and_city(self, state, city):
-        browser.element('#react-select-3-input').type(state).press_enter()
-        browser.element('#react-select-4-input').type(city).press_enter()
+        browser.element('#react-select-3-input').set_value(state).press_enter()
+        browser.element('#react-select-4-input').set_value(city).press_enter()
 
     def submit(self):
         browser.element('#submit').press_enter()
