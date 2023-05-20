@@ -28,7 +28,7 @@ class RegistrationPage:
         for hobby in student.hobbies:
             browser.all('.custom-checkbox').element_by(have.exact_text(hobby.value)).click()
 
-        browser.element('#uploadPicture').send_keys(os.getcwd() + f"/resources{student.picture}")
+        browser.element('#uploadPicture').send_keys(os.getcwd() + f"/resources/{student.picture}")
 
         browser.element('#currentAddress').type(student.address)
 
