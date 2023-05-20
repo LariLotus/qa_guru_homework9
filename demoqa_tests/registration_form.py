@@ -34,7 +34,7 @@ class RegistrationPage:
         browser.all('[for^=hobbies-checkbox]').element_by(have.exact_text(value)).click()
 
     def upload_picture(self, picture):
-        browser.element('#uploadPicture').send_keys(os.getcwd() + f'/{picture}')
+        browser.element('#uploadPicture').send_keys(os.getcwd() + f'/resources{picture}')
 
     def fill_current_address(self, value):
         browser.element('#currentAddress').type(value)
